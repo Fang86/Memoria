@@ -14,6 +14,7 @@ function love.keypressed(k)
         table.insert(path.selected.prevY, path.selected.y)
         table.insert(path.selected.prevX, path.selected.x)
         path.selected.y = path.selected.y + 1
+        moves = moves + 1
       end
     end
   end

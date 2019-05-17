@@ -53,7 +53,7 @@ function love.draw()
     love.graphics.setColor(1,1,1)
     
     --Delay bar
-    love.graphics.rectangle("fill", 0, 15, 250*(delayTimer/delayTimerMax), 15)
+    love.graphics.rectangle("fill", 500, 35, 950*(delayTimer/delayTimerMax), 35)
   end
   
   --Horizontal Center
@@ -62,7 +62,7 @@ function love.draw()
   drawGrid(grid.size, grid.wh, grid.border, grid.space)
   gui:draw()
   ui:draw()
-  love.graphics.print("Mouse X: " .. love.mouse.getX() .. ", Mouse Y: " .. love.mouse.getY(), 50, 50)
+  --love.graphics.print("Mouse X: " .. love.mouse.getX() .. ", Mouse Y: " .. love.mouse.getY(), 50, 50)
 end
 
 function getTimer()

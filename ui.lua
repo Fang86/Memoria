@@ -20,8 +20,8 @@ function ui:load()
   
   playButton = gui:button('Play', {x = xGui, y = 540-yGui-hGui/2, w = wGui, h = hGui}) -- a button(label, pos, optional parent) gui.style.unit is a standard gui unit (default 16), used to keep the interface tidy
 	playButton.click = function(this, x, y) -- set element:click() to make it respond to gui's click event
-		gamestate = 'playing'
-    --initGrid(grid.size)
+    initGrid(grid.size)
+    gamestate = 'playing'
 	end
   
   difficultyButton = gui:button('Difficulty', {x = xGui, y = 540-hGui/2, w = wGui, h = hGui})
@@ -32,29 +32,31 @@ function ui:load()
     easyButton = gui:button('Easy', {x = xGui, y = 540-hGui/2-9*gui.style.unit, w = wGui, h = hGui})
     easyButton.click = function(this, x, y) 
       difficulty = "easy"
-      end
+      grid.size = 3
+      pathTimerMax = 60
+      selectedVerts1 = easyVerts1
+      selectedVerts2 = easyVerts2
+      grid.wh = 750/grid.size
     end
     
     normalButton = gui:button('Normal', {x = xGui, y = 540-hGui/2-3*gui.style.unit, w = wGui, h = hGui})
     normalButton.click = function(this, x, y) 
       difficulty = "normal"
+      grid.size = 4
+      pathTimerMax = 45
       selectedVerts1 = normalVerts1
       selectedVerts2 = normalVerts2
-      for i in pairs(selectedVerts1) do
-        print("1: "..selectedVerts1[i])
-        print("2: "..selectedVerts2[i])
-      end
+      grid.wh = 750/grid.size
     end
     
     hardButton = gui:button('Hard', {x = xGui, y = 540-hGui/2+3*gui.style.unit, w = wGui, h = hGui})
     hardButton.click = function(this, x, y) 
       difficulty = "hard"
+      grid.size = 5
+      pathTimerMax = 30
       selectedVerts1 = hardVerts1
       selectedVerts2 = hardVerts2
-      for i in pairs(selectedVerts1) do
-        print("1: "..selectedVerts1[i])
-        print("2: "..selectedVerts2[i])
-      end
+      grid.wh = 750/grid.size
     end
     
     difficultyBackButton = gui:button('Back', {x = xGui, y = 540-hGui/2+9*gui.style.unit, w = wGui, h = hGui})
@@ -72,7 +74,7 @@ function ui:load()
 		gamestate = 'playing'
 	end]]
   
-
+end
 function ui:update()
   
   if gamestate == 'mainmenu' then
@@ -83,10 +85,7 @@ function ui:update()
     playButton:hide()
     difficultyButton:hide()
     exitButton:hide()
-		gamestate = 'playing'
-    --initGrid(grid.size)
 	end
-  end
   
   if gamestate == 'difficultyMenu' then
     easyButton:show()
@@ -99,15 +98,7 @@ function ui:update()
     hardButton:hide()
     difficultyBackButton:hide()
   end
-  
-  if difficulty == "easy" then
-    grid.size = 3
-  elseif difficulty == "normal" then
-    grid.size = 5
-  elseif difficulty == "hard" then
-  grid.size = 6
-  end
-
+end
 function ui:draw()
   
   if gamestate == 'difficultyMenu' then

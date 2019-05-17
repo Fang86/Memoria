@@ -1,6 +1,6 @@
 grid = {}
 grid.size = 3
-grid.wh = 150
+grid.wh = 750/grid.size
 grid.border = 10
 grid.space = 4
 
@@ -16,8 +16,8 @@ function initGrid(size)
   path.selected = {}
   path.selected.x = 0
   path.selected.y = 0
-  path.selected.prevX = 0
-  path.selected.prevY = 0
+  path.selected.prevX = {}
+  path.selected.prevY = {}
   moves = 1
   movesMax = (grid.size*2)
   
@@ -38,6 +38,17 @@ function initGrid(size)
 end
 
 function updateGrid()
+  
+  --[[if difficulty == "easy" then
+    grid.size = 3
+    pathTimerMax = 60
+  elseif difficulty == "normal" then
+    grid.size = 4
+    pathTimerMax = 45
+  elseif difficulty == "hard" then
+    grid.size = 5
+    pathTimerMax = 30
+  end]]
 end
 
 function drawGrid (size, wh, border, space)
@@ -73,11 +84,11 @@ function drawGrid (size, wh, border, space)
       end
     end
     
-    love.graphics.setColor(0,0.45,0)
+    love.graphics.setColor(0,0.5,0)
     love.graphics.rectangle("fill", 575+path.selected.x*(wh+space), 155+path.selected.y*(wh+space), wh, wh)
     love.graphics.setColor(1,1,1)
     
-    love.graphics.print(path.selected.x.."/"..(grid.size-1).."  "..path.selected.y.."/"..(grid.size-1), 100, 100)
+    --love.graphics.print(path.selected.x.."/"..(grid.size-1).."  "..path.selected.y.."/"..(grid.size-1), 100, 100)
   end
   
   if gamestate == 'lost' then
@@ -152,12 +163,12 @@ function gameReset()
   pathTimer = pathTimerMax
   
   delayTimer = delayTimerMax
-  --[[for k in pairs (path.selected.prevX) do
+  for k in pairs (path.selected.prevX) do
     path.selected.prevX[k] = nil
   end
   for k in pairs (path.selected.prevY) do
     path.selected.prevY[k] = nil
-  end]]
+  end
   
   for k in pairs (path.x) do
     path.x[k] = nil
@@ -173,8 +184,7 @@ function gameReset()
     grid.wh = 750/grid.size
     gamestate = 'playing'
   elseif gamestate == 'lost' then
-    grid.size = grid.sizeDiff
-    grid.size = grid.sizeDiff
+    --grid.size = grid.sizeDiff
     movesMax = (grid.size*2)
     createPath()
     grid.wh = 750/grid.size
@@ -186,6 +196,7 @@ function checkLost()
   if moves and movesMax then
     if moves <= movesMax then
       if path.selected.y ~= path.y[moves] or path.selected.x ~= path.x[moves] then
+        gamestate = "lost"
       end
     else
     gamestate = 'lost'
@@ -195,8 +206,9 @@ function checkLost()
 
 function checkWin()
   if gamestate == "playing" then
-  --if path.selected.x == grid.size-1 and path.selected.y == grid.size-1 then
-    gamestate = 'won'
-    gameReset()
+    if path.selected.x == grid.size-1 and path.selected.y == grid.size-1 then
+      gamestate = 'won'
+      gameReset()
+    end
   end
-  end
+end
